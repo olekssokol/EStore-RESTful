@@ -10,10 +10,10 @@ namespace EStore.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         ApplicationContext db;
-        public UsersController(ApplicationContext context)
+        public UserController(ApplicationContext context)
         {
             db = context;
             if (!db.User.Any())

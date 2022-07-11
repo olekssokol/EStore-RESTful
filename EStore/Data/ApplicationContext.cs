@@ -6,10 +6,10 @@ namespace EStore.Data
     public class ApplicationContext : DbContext
     {
         public DbSet<User> User { get; set; }
-        /* public ApplicationContext()
-         {
-             Database.EnsureCreated();
-         }*/
+        public DbSet<Order> Order { get; set; }
+        public DbSet<Goods> Goods { get; set; }
+        public DbSet<Orders> Orders { get; set; }
+       
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {
