@@ -8,8 +8,7 @@ namespace EStore.Models
 {
     public class Goods
     {
-        [Display(Name = "Id")]
-        public Int64 GoodsId { get; set; }
+        public Int64 Id { get; set; }
         public string Name { get; set; }
         public int Quantity { get; set; }
         public int PriceForOne { get; set; }

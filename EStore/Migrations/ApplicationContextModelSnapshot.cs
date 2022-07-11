@@ -20,7 +20,7 @@ namespace EStore.Migrations
 
             modelBuilder.Entity("EStore.Models.Goods", b =>
                 {
-                    b.Property<long>("GoodsId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -34,7 +34,7 @@ namespace EStore.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.HasKey("GoodsId");
+                    b.HasKey("Id");
 
                     b.ToTable("Goods");
                 });
@@ -80,6 +80,10 @@ namespace EStore.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GoodsId");
+
+                    b.HasIndex("OrderId");
+
                     b.ToTable("Orders");
                 });
 
@@ -113,6 +117,25 @@ namespace EStore.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EStore.Models.Orders", b =>
+                {
+                    b.HasOne("EStore.Models.Goods", "Goods")
+                        .WithMany()
+                        .HasForeignKey("GoodsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EStore.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Goods");
+
+                    b.Navigation("Order");
                 });
 #pragma warning restore 612, 618
         }

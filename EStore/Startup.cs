@@ -18,7 +18,7 @@ namespace EStore
         public void ConfigureServices(IServiceCollection services)
         {
             
-            string con = "Host=localhost;Port=5433;Database=EStoredwww;Username=postgres;Password=Admin";
+            string con = "Host=localhost;Port=5433;Database=EStore;Username=postgres;Password=Admin";
             // устанавливаем контекст данных
             services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(con));
 

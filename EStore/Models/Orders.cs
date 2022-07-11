@@ -12,8 +12,10 @@ namespace EStore.Models
         public Int64 Id { get; set; }
         [ForeignKey("Order")]
         public Int64 OrderId { get; set; }
+        public virtual Order Order { get; set; }
         [ForeignKey("Goods")]
         public Int64 GoodsId { get; set; }
+        public virtual Goods Goods { get; set; }
         public int Quantity { get; set; }
         public int TotalPrice { get; set; }
     }
