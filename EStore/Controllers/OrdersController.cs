@@ -15,13 +15,29 @@ namespace EStore.Controllers
         ApplicationContext db;
         public OrdersController(ApplicationContext context)
         {
-            /*db = context;
+            db = context;
             if (!db.Orders.Any())
             {
-                db.Orders.Add(new Orders {  });
-                db.Orders.Add(new Orders { OrdersNumber  = 124, UserId = 5 });
+                Orders orders = new Orders { OrderId = 1, GoodsId = 1, Quantity = 3 };
+
+                orders.TotalPrice = orders.Quantity *
+                     (from goods in db.Goods
+                      where goods.Id == orders.GoodsId
+                      select goods.PriceForOne).First();
+                    
+                db.Orders.Add(orders);
+
+                orders = new Orders { OrderId = 1, GoodsId = 2, Quantity = 2 };
+
+                orders.TotalPrice = orders.Quantity *
+                     (from goods in db.Goods
+                      where goods.Id == orders.GoodsId
+                      select goods.PriceForOne).First();
+
+                db.Orders.Add(orders);
+
                 db.SaveChanges();
-            }*/
+            }
         }
 
         [HttpGet]

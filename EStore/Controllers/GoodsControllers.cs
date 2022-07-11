@@ -10,31 +10,31 @@ namespace EStore.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class GoodsController : ControllerBase
     {
         ApplicationContext db;
-        public OrderController(ApplicationContext context)
+        public GoodsController(ApplicationContext context)
         {
             db = context;
-            if (!db.Order.Any())
+            if (!db.Goods.Any())
             {
-                db.Order.Add(new Order { OrderNumber  = 123, UserId = 1 });
-                db.Order.Add(new Order { OrderNumber  = 124, UserId = 2 });
+                db.Goods.Add(new Goods { Name  = "Mechanical keyboard", Quantity = 100, PriceForOne = 75 });
+                db.Goods.Add(new Goods { Name  = "Mechanical mouse", Quantity = 55, PriceForOne = 45 });
                 db.SaveChanges();
             }
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> Get()
+        public async Task<ActionResult<IEnumerable<Goods>>> Get()
         {
-            return await db.Order.ToListAsync();
+            return await db.Goods.ToListAsync();
         }
 
         
         [HttpGet("{id}")]
-        public async Task<ActionResult<Order>> Get(int id)
+        public async Task<ActionResult<Goods>> Get(int id)
         {
-            Order order = await db.Order.FirstOrDefaultAsync(x => x.Id == id);
+            Goods order = await db.Goods.FirstOrDefaultAsync(x => x.Id == id);
             if (order == null)
                 return NotFound();
             return new ObjectResult(order);
@@ -42,27 +42,27 @@ namespace EStore.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<Order>> Post(Order order)
+        public async Task<ActionResult<Goods>> Post(Goods order)
         {
             if (order == null)
             {
                 return BadRequest();
             }
 
-            db.Order.Add(order);
+            db.Goods.Add(order);
             await db.SaveChangesAsync();
             return Ok(order);
         }
 
 
         [HttpPut]
-        public async Task<ActionResult<Order>> Put(Order order)
+        public async Task<ActionResult<Goods>> Put(Goods order)
         {
             if (order == null)
             {
                 return BadRequest();
             }
-            if (!db.Order.Any(x => x.Id == order.Id))
+            if (!db.Goods.Any(x => x.Id == order.Id))
             {
                 return NotFound();
             }
@@ -74,14 +74,14 @@ namespace EStore.Controllers
 
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Order>> Delete(int id)
+        public async Task<ActionResult<Goods>> Delete(int id)
         {
-            Order order = db.Order.FirstOrDefault(x => x.Id == id);
+            Goods order = db.Goods.FirstOrDefault(x => x.Id == id);
             if (order == null)
             {
                 return NotFound();
             }
-            db.Order.Remove(order);
+            db.Goods.Remove(order);
             await db.SaveChangesAsync();
             return Ok(order);
         }
