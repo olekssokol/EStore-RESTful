@@ -2,6 +2,7 @@
 using EStore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,8 +19,8 @@ namespace EStore.Controllers
             db = context;
             if (!db.Goods.Any())
             {
-                db.Goods.Add(new Goods { Name  = "Mechanical keyboard", Quantity = 100, PriceForOne = 75 });
-                db.Goods.Add(new Goods { Name  = "Mechanical mouse", Quantity = 55, PriceForOne = 45 });
+                db.Goods.Add(new Goods { Name = "Mechanical keyboard", Quantity = 100, PriceForOne = 75 });
+                db.Goods.Add(new Goods { Name = "Mechanical mouse", Quantity = 55, PriceForOne = 45 });
                 db.SaveChanges();
             }
         }
@@ -30,60 +31,99 @@ namespace EStore.Controllers
             return await db.Goods.ToListAsync();
         }
 
-        
-        [HttpGet("{id}")]
+        [HttpGet("{word}")]
+        public async Task<ActionResult<Goods>> Get(string word)
+        {
+            int count = 0;
+            String names = "";
+            if (word != null)
+            {
+                List<Goods> goodsList = new List<Goods>();
+                foreach (var good in db.Goods)
+                {
+
+                    if (good.Name.Contains(word))
+                    {
+                        names += good.Name + ", ";
+                        count++;
+
+                    }
+                }
+                if (goodsList == null)
+                    return NotFound();
+                return new ObjectResult($"Names: {names}\nCount: {count}");
+            }
+
+            return NotFound();
+        }
+
+
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<Goods>> Get(int id)
         {
-            Goods order = await db.Goods.FirstOrDefaultAsync(x => x.Id == id);
-            if (order == null)
+            Goods goods = await db.Goods.FirstOrDefaultAsync(x => x.Id == id);
+            if (goods == null)
                 return NotFound();
-            return new ObjectResult(order);
+            return new ObjectResult(goods);
         }
 
 
         [HttpPost]
-        public async Task<ActionResult<Goods>> Post(Goods order)
+        public async Task<ActionResult<Goods>> Post(Goods goods)
         {
-            if (order == null)
+            if (goods == null)
             {
                 return BadRequest();
             }
 
-            db.Goods.Add(order);
+            db.Goods.Add(goods);
             await db.SaveChangesAsync();
-            return Ok(order);
+            return Ok(goods);
         }
 
 
         [HttpPut]
-        public async Task<ActionResult<Goods>> Put(Goods order)
+        public async Task<ActionResult<Goods>> Put(Goods goods)
         {
-            if (order == null)
+            if (goods == null)
             {
                 return BadRequest();
             }
-            if (!db.Goods.Any(x => x.Id == order.Id))
+            if (!db.Goods.Any(x => x.Id == goods.Id))
             {
                 return NotFound();
             }
 
-            db.Update(order);
+            db.Update(goods);
             await db.SaveChangesAsync();
-            return Ok(order);
+            return Ok(goods);
+        }
+
+        public Goods Put(Int64 id, int quantity)
+        {
+            Goods goods = db.Goods.FirstOrDefault(x => x.Id == id);
+
+            if (goods != null && db.Goods.Any(x => x.Id == goods.Id))
+            {
+                goods.Quantity -= quantity;
+                return goods;
+            }
+
+            return null;
         }
 
 
         [HttpDelete("{id}")]
         public async Task<ActionResult<Goods>> Delete(int id)
         {
-            Goods order = db.Goods.FirstOrDefault(x => x.Id == id);
-            if (order == null)
+            Goods goods = db.Goods.FirstOrDefault(x => x.Id == id);
+            if (goods == null)
             {
                 return NotFound();
             }
-            db.Goods.Remove(order);
+            db.Goods.Remove(goods);
             await db.SaveChangesAsync();
-            return Ok(order);
+            return Ok(goods);
         }
     }
 }

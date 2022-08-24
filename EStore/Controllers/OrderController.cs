@@ -30,7 +30,9 @@ namespace EStore.Controllers
             return await db.Order.ToListAsync();
         }
 
-        
+       
+
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> Get(int id)
         {

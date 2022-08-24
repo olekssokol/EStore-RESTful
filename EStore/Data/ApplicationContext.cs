@@ -13,7 +13,10 @@ namespace EStore.Data
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)
         {
-            Database.EnsureCreated();
+            try
+            {
+                Database.EnsureCreated();
+            } catch { }
         }
     }
 }
